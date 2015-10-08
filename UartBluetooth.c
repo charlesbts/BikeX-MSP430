@@ -18,7 +18,6 @@ inline void setupUart(){
     UCA0BR1 = 0;
     UCA0MCTL = UCBRS_1;
     UCA0CTL1 &= ~UCSWRST;
-    //UC0IE |= UCA0RXIE;
 }
 
 #pragma vector = USCIAB0RX_VECTOR

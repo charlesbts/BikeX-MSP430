@@ -23,19 +23,20 @@ main(void) {
 	setupInput();
 	setupOutput();
 	setupUart();
-	//setupTimer0();
+	setupTimer0();
 	setupTimer1();
 
 	__enable_interrupt();
 	while(1){
-		__low_power_mode_0();
+		__low_power_mode_3();
 		/**
-		 * Implementação do protocolo de envio para o smarthphone.
-		 * Tamanho fixo: 4 bytes
+		 * Implementação do protocolo de envio para o smartphone.
+		 * Tamanho fixo: 3 bytes
 		 * 1º byte: Identificador do sensor
 		 * 2º byte: MSB da medida obtida
 		 * 3º byte: LSB da medida obtida
 		 */
+		__disable_interrupt();
 		switch(flagIdSensor){
 			case WHEEL_SENSOR:
 				sendByte(flagIdSensor);
@@ -50,6 +51,7 @@ main(void) {
 				adjustPedalTimerPeriod();
 				break;
 		}
+		__enable_interrupt();
 	}
 
 }
