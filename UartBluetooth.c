@@ -20,18 +20,6 @@ inline void setupUart(){
     UCA0CTL1 &= ~UCSWRST;
 }
 
-#pragma vector = USCIAB0RX_VECTOR
-__interrupt void USCI0RX_ISR(void){
-		if (UCA0RXBUF == 'a'){
-			P1OUT |= BIT0;
-			UCA0TXBUF = 'z';
-		}
-		else if(UCA0RXBUF == 'b'){
-			P1OUT &= ~BIT0;
-			UCA0TXBUF = 'y';
-		}
-}
-
 void sendByte(uint8_t byte){
 	UCA0TXBUF = byte;
 	while (UCA0STAT & UCBUSY);

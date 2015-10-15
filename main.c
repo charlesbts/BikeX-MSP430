@@ -17,6 +17,9 @@ inline void setupClock();
  */
 uint8_t flagIdSensor;
 main(void) {
+
+uint8_t flagIdAtual, timeMsb, timeLsb;
+
 	WDTCTL = WDTPW | WDTHOLD;		// Stop watchdog timer
 
 	setupClock();
@@ -28,7 +31,8 @@ main(void) {
 
 	__enable_interrupt();
 	while(1){
-		__low_power_mode_3();
+		if(flagIdSensor == flagIdAtual)
+			__low_power_mode_3();
 		/**
 		 * Implementação do protocolo de envio para o smartphone.
 		 * Tamanho fixo: 3 bytes
@@ -36,22 +40,34 @@ main(void) {
 		 * 2º byte: MSB da medida obtida
 		 * 3º byte: LSB da medida obtida
 		 */
-		__disable_interrupt();
 		switch(flagIdSensor){
 			case WHEEL_SENSOR:
-				sendByte(flagIdSensor);
-				sendByte(getWheelTimeMsb());
-				sendByte(getWheelTimeLsb());
-				adjustTimerPeriod();
+				flagIdAtual = WHEEL_SENSOR;
+				if(wheelTime > 190){
+					__disable_interrupt();
+					timeMsb = getWheelTimeMsb();
+					timeLsb = getWheelTimeLsb();
+					adjustWheelTimerPeriod();
+					__enable_interrupt();
+					sendByte(WHEEL_SENSOR);
+					sendByte(timeMsb);
+					sendByte(timeLsb);
+				}
 				break;
 			case PEDAL_SENSOR:
-				sendByte(flagIdSensor);
-				sendByte(getPedalTimeMsb());
-				sendByte(getPedalTimeLsb());
-				adjustPedalTimerPeriod();
+				flagIdAtual = PEDAL_SENSOR;
+				if(pedalTime > 800){
+					__disable_interrupt();
+					timeMsb = getPedalTimeMsb();
+					timeLsb = getPedalTimeLsb();
+					adjustPedalTimerPeriod();
+					__enable_interrupt();
+					sendByte(PEDAL_SENSOR);
+					sendByte(timeMsb);
+					sendByte(timeLsb);
+				}
 				break;
 		}
-		__enable_interrupt();
 	}
 
 }

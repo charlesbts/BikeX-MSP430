@@ -18,7 +18,7 @@ extern uint16_t timer_range;
 extern uint8_t divisor_timer;
 
 inline void setupTimer1();
-void adjustTimerPeriod();
+void adjustWheelTimerPeriod();
 inline uint8_t getWheelTimeLsb();
 inline uint8_t getWheelTimeMsb();
 

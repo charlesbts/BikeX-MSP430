@@ -29,7 +29,7 @@ inline void setupTimer1(){
 	TA1CCTL1 |= CCIE;
 }
 
-void adjustTimerPeriod(){
+void adjustWheelTimerPeriod(){
 	if(wheelTime == TIMER_OVERFLOW && divisor_timer < TIMER_MAX_DIVISOR){
 		_adjustRangeUp();
 	}

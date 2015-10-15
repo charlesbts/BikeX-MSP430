@@ -13,6 +13,7 @@
 
 #define PEDAL_SENSOR 42
 
+extern uint16_t pedalTime;
 uint8_t flagIdSensor;
 
 inline void setupTimer0();
